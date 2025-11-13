@@ -19,6 +19,10 @@ class ArxivPaper:
     def __init__(self,paper:arxiv.Result):
         self._paper = paper
         self.score = None
+        if getattr(self._paper, "pdf_url", None) is None:
+            short_id = self._paper.get_short_id()
+            self._paper.pdf_url = f"https://arxiv.org/pdf/{short_id}.pdf"
+            logger.debug(f"Fixed missing pdf_url for {short_id} → {self._paper.pdf_url}")
     
     @property
     def title(self) -> str:
